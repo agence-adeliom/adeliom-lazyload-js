@@ -118,21 +118,6 @@ const updateSrc = () => {
 
 
 /**
- * Function for merging object as Object.assign does
- *  - Object.assign is not working on IE
- */
-const mergeObject = (first, second) => {
-    let objs = [first, second];
-    return objs.reduce(function (r, o) {
-        Object.keys(o).forEach(function (k) {
-            r[k] = o[k];
-        });
-        return r;
-    });
-}
-
-
-/**
  * Test Retina
  * - Some functions to know if a retina screen is used
  */
@@ -145,6 +130,9 @@ const isRetina = () => {
 }
 
 
+/**
+ * Export functions
+ */
 export default {
     init
 };
