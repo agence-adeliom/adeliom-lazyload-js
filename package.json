@@ -2,7 +2,7 @@
   "name": "lazyload",
   "version": "1.0.0",
   "description": "Lazyload for images",
-  "main": "lazyload.js",
+  "main": "src/lazyload.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
