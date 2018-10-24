@@ -24,7 +24,7 @@ let nbElements;
 
 let options = {
     beforeVisible: 500,
-    selector: '.image'
+    selector: '[js-lazyload]'
 };
 
 
