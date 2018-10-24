@@ -1,0 +1,19 @@
+{
+  "name": "lazyload",
+  "version": "1.0.0",
+  "description": "Lazyload for images",
+  "main": "lazyload.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "lazyload"
+  ],
+  "author": "Adeliom",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/adeliomgit/lazyload#readme",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
+}

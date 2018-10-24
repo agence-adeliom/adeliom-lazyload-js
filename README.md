@@ -1,5 +1,7 @@
 # Import
+```
 import Lazyload from './lazyload';
+```
 
 # Available options (by default)
 
