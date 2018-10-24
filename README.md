@@ -1,3 +1,8 @@
+# Install
+```
+https://bitbucket.org/adeliomgit/lazyload.git
+```
+
 # Import
 ```
 import Lazyload from './lazyload';
