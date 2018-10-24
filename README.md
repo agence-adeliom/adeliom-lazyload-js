@@ -1,6 +1,6 @@
 # Install
 ```
-https://bitbucket.org/adeliomgit/lazyload.git
+yarn add https://bitbucket.org/adeliomgit/lazyload.git
 ```
 
 # Import
