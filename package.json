@@ -12,7 +12,7 @@
   ],
   "author": "Adeliom",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/adeliomgit/lazyload#readme",
+  "homepage": "https://bitbucket.org/adeliomgit/adeliom-lazyload-js#readme",
   "dependencies": {
     "babel-polyfill": "^6.26.0"
   }
