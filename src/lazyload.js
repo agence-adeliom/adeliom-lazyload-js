@@ -51,12 +51,17 @@ const init = settings => {
 
 };
 
+
+/**
+ * Event on scroll
+ */
 const initScroll = () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
         updateSrc();
     }, 150);
 };
+
 
 /**
  * Replace images's source
