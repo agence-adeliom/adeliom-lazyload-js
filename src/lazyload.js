@@ -14,6 +14,8 @@ import 'babel-polyfill';
 
 let elements;
 let nbElements;
+let resizeTimer;
+let i = 0;
 
 
 /**
@@ -23,7 +25,7 @@ let nbElements;
  */
 
 let options = {
-    beforeVisible: 500,
+    beforeVisible: 0,
     selector: '[js-lazyload]'
 };
 
@@ -42,22 +44,19 @@ const init = settings => {
 
     if(nbElements){
 
-        let resizeTimer;
-
         updateSrc();
 
-        window.addEventListener('scroll', function(e) {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
-
-                updateSrc();
-
-            }, 150);
-
-        });
+        window.addEventListener('scroll', initScroll);
     }
 
-}
+};
+
+const initScroll = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        updateSrc();
+    }, 150);
+};
 
 /**
  * Replace images's source
@@ -68,11 +67,9 @@ const updateSrc = () => {
 
     // When every image is loaded unbind the event
     if(i === nbElements){
-        window.unbind('scroll')
+        window.removeEventListener('scroll', initScroll);
         return;
     }
-
-    let i = 0;
 
     for (let el of elements) {
 
@@ -82,7 +79,7 @@ const updateSrc = () => {
         if(el.getAttribute('data-img')){
             src = el.getAttribute('data-img');
         }
-        if(el.getAttribute('data-img-retina') && isRetina() || el.getAttribute('data-img-retina') && isHighDensity()){
+        if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
             src = el.getAttribute('data-img-retina');
         }
 
@@ -108,13 +105,14 @@ const updateSrc = () => {
                         el.style.backgroundImage = 'url("'+ src +'")';
                         el.style.backgroundRepeat = 'no-repeat';
                     }
-                    i++;
                 });
+
+                i++;
             }
         }
     }
 
-}
+};
 
 
 /**
@@ -123,11 +121,11 @@ const updateSrc = () => {
  */
 const isHighDensity = () => {
     return ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-}
+};
 
 const isRetina = () => {
     return ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx), only screen and (min-resolution: 75.6dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)').matches)) || (window.devicePixelRatio && window.devicePixelRatio >= 2)) && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
-}
+};
 
 
 /**
