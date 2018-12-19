@@ -16,3 +16,11 @@ Lazyload.init({
     selector: '[js-lazyload]'
 });
 ```
+
+# HTML
+
+```
+<div data-img="url_img_original" data-img-retina="url_img_original_retina" style="background-image:url('thumbnail')"></div>
+
+<img src="thumbnail" data-img="url_img_original" data-img-retina="url_img_original_retina">
+```
