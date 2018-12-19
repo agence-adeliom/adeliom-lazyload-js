@@ -53,6 +53,15 @@ const init = settings => {
 
 
 /**
+ * Refresh
+ * - Create options merging defaults with user defined options
+ */
+const refresh = () => {
+    init();
+};
+
+
+/**
  * Event on scroll
  */
 const initScroll = () => {
@@ -137,5 +146,6 @@ const isRetina = () => {
  * Export functions
  */
 export default {
-    init
+    init,
+    refresh
 };
