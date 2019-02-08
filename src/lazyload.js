@@ -26,7 +26,11 @@ let i = 0;
 
 let options = {
     beforeVisible: 0,
-    selector: '[js-lazyload]'
+    selector: '[js-lazyload]',
+    breakpoints: {
+        sm: 720,
+        lg: 1280
+    }
 };
 
 
@@ -43,9 +47,7 @@ const init = settings => {
     nbElements = elements.length;
 
     if(nbElements){
-
         updateSrc();
-
         window.addEventListener('scroll', initScroll);
     }
 
@@ -89,13 +91,7 @@ const updateSrc = () => {
 
         let src = null;
 
-        // Take the right source depending on retina screen
-        if(el.getAttribute('data-img')){
-            src = el.getAttribute('data-img');
-        }
-        if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
-            src = el.getAttribute('data-img-retina');
-        }
+        src = getSrc(el);
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -111,6 +107,8 @@ const updateSrc = () => {
                 // When img is loaded => add it to the DOM
                 img.addEventListener('load', function(){
                     el.removeAttribute('data-img');
+                    el.removeAttribute('data-img-sm');
+                    el.removeAttribute('data-img-lg');
                     el.removeAttribute('data-img-retina');
                     if(el.tagName === "IMG"){
                         el.setAttribute('src', src);
@@ -126,6 +124,29 @@ const updateSrc = () => {
         }
     }
 
+};
+
+
+/**
+ * Return src for image
+ * - Take the right source depending on retina screen and breakpoint
+ */
+const getSrc = (el) => {
+
+    if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
+        return el.getAttribute('data-img-retina');
+    }
+    if(el.getAttribute('data-img-lg') && window.matchMedia("(min-width:" + options.breakpoints.lg + "px)").matches) {
+        return el.getAttribute('data-img-lg');
+    }
+    if(el.getAttribute('data-img-sm') && window.matchMedia("(min-width:" + options.breakpoints.sm + "px)").matches) {
+        return el.getAttribute('data-img-sm');
+    }
+    if(el.getAttribute('data-img')){
+        return el.getAttribute('data-img');
+    }
+    
+    return null;
 };
 
 
