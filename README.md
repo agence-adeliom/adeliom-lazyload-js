@@ -6,9 +6,21 @@ yarn add https://bitbucket.org/adeliomgit/adeliom-lazyload-js.git
 # HTML
 
 ```
-<div data-img="url_img_original" data-img-retina="url_img_original_retina" style="background-image:url('thumbnail')"></div>
+<div
+js-lazyload
+data-img="url_img_xs"
+data-img-sm="url_img_sm"
+data-img-lg="url_img_lg"
+data-img-retina="url_img_retina"
+style="background-image:url('thumbnail')"></div>
 
-<img src="thumbnail" data-img="url_img_original" data-img-retina="url_img_original_retina">
+<img
+js-lazyload
+src="thumbnail"
+data-img="url_img_xs"
+data-img-sm="url_img_sm"
+data-img-lg="url_img_lg"
+data-img-retina="url_img_retina">
 ```
 
 # Import
@@ -20,7 +32,19 @@ import Lazyload from './lazyload';
 
 ```
 Lazyload.init({
-    beforeVisible: 500,
-    selector: '[js-lazyload]'
+    beforeVisible: 150,
+    selector: '[js-lazyload]',
+    breakpoints: {
+        sm: 720,
+        lg: 1280
+    }
 });
+```
+
+# Available methods
+
+```
+Lazyload.init();
+Lazyload.refresh();
+Lazyload.update();
 ```

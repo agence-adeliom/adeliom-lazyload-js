@@ -5,6 +5,12 @@
  */
 import 'babel-polyfill';
 
+/**
+ * *******************************************************
+ * Css default
+ * *******************************************************
+ */
+import 'lazyload.css';
 
 /**
  * *******************************************************
@@ -25,8 +31,12 @@ let i = 0;
  */
 
 let options = {
-    beforeVisible: 0,
-    selector: '[js-lazyload]'
+    beforeVisible: 150,
+    selector: '[js-lazyload]',
+    breakpoints: {
+        sm: 720,
+        lg: 1280
+    }
 };
 
 
@@ -43,12 +53,18 @@ const init = settings => {
     nbElements = elements.length;
 
     if(nbElements){
-
         updateSrc();
-
         window.addEventListener('scroll', initScroll);
     }
 
+};
+
+/**
+ * Update
+ * - Update source of images
+ */
+const update = () => {
+    updateSrc();
 };
 
 
@@ -89,19 +105,22 @@ const updateSrc = () => {
 
         let src = null;
 
-        // Take the right source depending on retina screen
-        if(el.getAttribute('data-img')){
-            src = el.getAttribute('data-img');
-        }
-        if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
-            src = el.getAttribute('data-img-retina');
-        }
+        src = getSrc(el);
 
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        let bottomPos = scrollTop + window.innerHeight;
+        const bottomPos = scrollTop + window.innerHeight;
+		
+		const position = el.getBoundingClientRect();
 
-        if(bottomPos > el.offsetTop - options.beforeVisible || !options.beforeVisible){
+		if(!position || !position.height){
+			return;
+		}
+
+		const bodyRect = document.body.getBoundingClientRect();
+		const positionTop = position.top - bodyRect.top;
+
+		if (bottomPos > positionTop - options.beforeVisible || !options.beforeVisible) {
             if(src){
 
                 // Create an img object
@@ -110,8 +129,15 @@ const updateSrc = () => {
 
                 // When img is loaded => add it to the DOM
                 img.addEventListener('load', function(){
-                    el.removeAttribute('data-img');
-                    el.removeAttribute('data-img-retina');
+                    
+					el.removeAttribute('data-img');
+					el.removeAttribute('data-img-retina');
+
+					for(let i = 0; i < Object.keys(options.breakpoints).length; i++){
+						var breakpoint = Object.keys(options.breakpoints)[i];
+						el.removeAttribute('data-img-'+breakpoint);
+					}
+							
                     if(el.tagName === "IMG"){
                         el.setAttribute('src', src);
                     }
@@ -119,6 +145,7 @@ const updateSrc = () => {
                         el.style.backgroundImage = 'url("'+ src +'")';
                         el.style.backgroundRepeat = 'no-repeat';
                     }
+					
                 });
 
                 i++;
@@ -126,6 +153,32 @@ const updateSrc = () => {
         }
     }
 
+};
+
+
+/**
+ * Return src for image
+ * - Take the right source depending on retina screen and breakpoint
+ */
+const getSrc = (el) => {
+
+    if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
+        return el.getAttribute('data-img-retina');
+    }
+    
+	for(let i = 0; i < Object.keys(options.breakpoints).length; i++){
+		var breakpoint = Object.keys(options.breakpoints)[i];
+		var breakpointValue = Object.values(options.breakpoints)[i];
+		if (el.getAttribute('data-img-'+breakpoint) && window.matchMedia("(min-width:" + breakpointValue + "px)").matches) {
+			return el.getAttribute('data-img-'+breakpoint);
+		}
+	}
+		
+    if(el.getAttribute('data-img')){
+        return el.getAttribute('data-img');
+    }
+    
+    return null;
 };
 
 
@@ -147,5 +200,6 @@ const isRetina = () => {
  */
 export default {
     init,
-    refresh
+    refresh,
+	update
 };
