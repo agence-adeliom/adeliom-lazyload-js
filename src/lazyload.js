@@ -3,7 +3,7 @@
  * Polyfill for IE
  * *******************************************************
  */
-import 'babel-polyfill';
+//import 'babel-polyfill';
 
 
 /**
@@ -176,9 +176,8 @@ const getSrc = (el) => {
         var breakpointValue = Object.values(options.breakpoints)[i];
 
 		if (window.matchMedia("(min-width:" + breakpointValue + "px)").matches) {
-
             if(isRetina() && el.getAttribute('data-img-'+breakpoint+'-'+window.devicePixelRatio+'x')){
-                return el.getAttribute('data-img-'+breakpoint);
+                return el.getAttribute('data-img-'+breakpoint+'-'+window.devicePixelRatio+'x');
             }
 
             if(el.getAttribute('data-img-'+breakpoint)){
