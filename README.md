@@ -11,7 +11,7 @@ js-lazyload
 data-img="url_img_xs"
 data-img-sm="url_img_sm"
 data-img-lg="url_img_lg"
-data-img-retina="url_img_retina"
+data-img-2x="url_img_retina"
 style="background-image:url('thumbnail')"></div>
 
 <img
@@ -20,7 +20,7 @@ src="thumbnail"
 data-img="url_img_xs"
 data-img-sm="url_img_sm"
 data-img-lg="url_img_lg"
-data-img-retina="url_img_retina">
+data-img-2x="url_img_retina">
 ```
 
 # Import
@@ -45,6 +45,6 @@ Lazyload.init({
 
 ```
 Lazyload.init();
-Lazyload.refresh();
+Lazyload.reset();
 Lazyload.update();
 ```

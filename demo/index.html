@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lazyload</title>
+</head>
+
+<link rel="stylesheet" href="./main.css">
+
+<style>
+    .image{
+        width: 300px;
+        height: 200px;
+        margin-bottom: 50px;
+        background-position: center;
+        background-size: cover;
+    }
+    img{
+        display: block;
+        width: 192px;
+        margin-top: 50px;
+    }
+</style>
+
+<body>
+
+    <div class="image"
+    js-lazyload
+    data-img="https://via.placeholder.com/192x108"
+    data-img-2x="https://via.placeholder.com/1920x1080"
+    data-img-lg="https://via.placeholder.com/2048x1080"
+    style="background-image:url('https://via.placeholder.com/19x10')"></div>
+
+    <!-- <div js-lazyload class="image lazyload-bg" data-img="https://via.placeholder.com/1920x1080"></div>
+
+    <img js-lazyload data-img="https://via.placeholder.com/1920x1080" src="https://via.placeholder.com/19x10" alt="">
+
+    <img js-lazyload data-img="https://via.placeholder.com/1920x1080" src="" alt="Test"> -->
+
+    <script type="module" src="./lazyload.js"></script>
+
+</body>
+</html>

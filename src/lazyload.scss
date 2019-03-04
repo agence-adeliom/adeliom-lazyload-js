@@ -1,0 +1,28 @@
+$lazyload-background: #eeeeee !default;
+$lazyload-background-animated: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%) !default;
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+
+.lazyload-bg[js-lazyload] {
+    background: $lazyload-background;
+}
+
+.lazyload-bg--animated[js-lazyload] {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background-image: $lazyload-background-animated;
+    background-repeat: no-repeat !important;
+    background-size: 100% !important;
+    position: relative;
+}

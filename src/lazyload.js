@@ -3,7 +3,7 @@
  * Polyfill for IE
  * *******************************************************
  */
-import 'babel-polyfill';
+//import 'babel-polyfill';
 
 
 /**
@@ -42,9 +42,7 @@ const init = settings => {
 
     options = Object.assign(options, settings);
 
-    // Get all elements
-    elements = document.querySelectorAll(options.selector);
-    nbElements = elements.length;
+    getElements();
 
     if(nbElements){
         updateSrc();
@@ -53,20 +51,33 @@ const init = settings => {
 
 };
 
+
+/**
+ * Get elements
+ * - Get all elements from selector
+ */
+const getElements = () => {
+    elements = document.querySelectorAll(options.selector);
+    nbElements = elements.length;
+};
+
+
 /**
  * Update
  * - Update source of images
  */
 const update = () => {
+    getElements();
     updateSrc();
 };
 
 
 /**
- * Refresh
+ * Reset
  * - Create options merging defaults with user defined options
  */
-const refresh = () => {
+const reset = () => {
+    window.removeEventListener('scroll', initScroll);
     init();
 };
 
@@ -104,12 +115,12 @@ const updateSrc = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
         const bottomPos = scrollTop + window.innerHeight;
-		
+
 		const position = el.getBoundingClientRect();
 
 		if(!position || !position.height){
 			return;
-		}
+        }
 
 		const bodyRect = document.body.getBoundingClientRect();
 		const positionTop = position.top - bodyRect.top;
@@ -123,15 +134,17 @@ const updateSrc = () => {
 
                 // When img is loaded => add it to the DOM
                 img.addEventListener('load', function(){
-                    
-					el.removeAttribute('data-img');
-					el.removeAttribute('data-img-retina');
 
-					for(let i = 0; i < Object.keys(options.breakpoints).length; i++){
-						var breakpoint = Object.keys(options.breakpoints)[i];
-						el.removeAttribute('data-img-'+breakpoint);
-					}
-							
+                    for (let n = el.attributes.length - 1; n >= 0; n--){
+                        let attribute = el.attributes[n].nodeName.split('-');
+                        if(attribute.length && attribute[0] === 'data' && attribute[1] === "img"){
+                            el.removeAttribute(el.attributes[n].nodeName);
+                        }
+                      }
+
+                    el.removeAttribute('js-lazyload');
+                    el.setAttribute("js-lazyload-ready","");
+
                     if(el.tagName === "IMG"){
                         el.setAttribute('src', src);
                     }
@@ -139,7 +152,8 @@ const updateSrc = () => {
                         el.style.backgroundImage = 'url("'+ src +'")';
                         el.style.backgroundRepeat = 'no-repeat';
                     }
-					
+
+
                 });
 
                 i++;
@@ -156,36 +170,42 @@ const updateSrc = () => {
  */
 const getSrc = (el) => {
 
-    if((el.getAttribute('data-img-retina') && isRetina()) || (el.getAttribute('data-img-retina') && isHighDensity())){
-        return el.getAttribute('data-img-retina');
-    }
-    
 	for(let i = 0; i < Object.keys(options.breakpoints).length; i++){
+
 		var breakpoint = Object.keys(options.breakpoints)[i];
-		var breakpointValue = Object.values(options.breakpoints)[i];
-		if (el.getAttribute('data-img-'+breakpoint) && window.matchMedia("(min-width:" + breakpointValue + "px)").matches) {
-			return el.getAttribute('data-img-'+breakpoint);
-		}
-	}
-		
+        var breakpointValue = Object.values(options.breakpoints)[i];
+
+		if (window.matchMedia("(min-width:" + breakpointValue + "px)").matches) {
+
+            if(isRetina() && el.getAttribute('data-img-'+breakpoint+'-'+window.devicePixelRatio+'x')){
+                return el.getAttribute('data-img-'+breakpoint);
+            }
+
+            if(el.getAttribute('data-img-'+breakpoint)){
+                return el.getAttribute('data-img-'+breakpoint);
+            }
+
+        }
+
+    }
+
+    if((el.getAttribute('data-img-2x') && isRetina())){
+        return el.getAttribute('data-img-2x');
+    }
+
     if(el.getAttribute('data-img')){
         return el.getAttribute('data-img');
     }
-    
+
     return null;
 };
 
 
 /**
  * Test Retina
- * - Some functions to know if a retina screen is used
  */
-const isHighDensity = () => {
-    return ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
-};
-
 const isRetina = () => {
-    return ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx), only screen and (min-resolution: 75.6dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)').matches)) || (window.devicePixelRatio && window.devicePixelRatio >= 2)) && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    return window.devicePixelRatio && window.devicePixelRatio >= 2;
 };
 
 
@@ -194,6 +214,6 @@ const isRetina = () => {
  */
 export default {
     init,
-    refresh,
+    reset,
 	update
 };
