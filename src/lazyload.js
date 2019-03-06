@@ -3,7 +3,7 @@
  * Polyfill for IE
  * *******************************************************
  */
-//import 'babel-polyfill';
+import 'babel-polyfill';
 
 
 /**
@@ -106,11 +106,11 @@ const updateSrc = () => {
         return;
     }
 
-    for (let el of elements) {
+    for(let n = 0; n < elements.length; n++){
 
-        let src = null;
+        const el = elements[n];
 
-        src = getSrc(el);
+        const src = getSrc(el);
 
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
