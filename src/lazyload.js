@@ -110,14 +110,14 @@ const updateSrc = () => {
 
 		const position = el.getBoundingClientRect();
 
-		if(!position || !position.height){
+		if(!position){
 			return;
         }
 
 		const bodyRect = document.body.getBoundingClientRect();
 		const positionTop = position.top - bodyRect.top;
 
-		if (bottomPos > positionTop - options.beforeVisible || !options.beforeVisible) {
+		if (bottomPos > positionTop - options.beforeVisible || !options.beforeVisible || !position.height) {
             if(src){
 
                 // Create an img object
